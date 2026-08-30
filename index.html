@@ -1,0 +1,1439 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>EcoAI - Smart Waste Management</title>
+
+<style>
+
+*{
+    box-sizing:border-box;
+}
+
+body{
+    margin:0;
+    font-family:Arial,sans-serif;
+
+    /* YOUR RECYCLE BACKGROUND IMAGE */
+    background:
+    linear-gradient(
+        rgba(0,70,40,.35),
+        rgba(0,100,60,.35)
+    ),
+    url("background.jpg");
+
+    background-size:cover;
+    background-position:center;
+    background-attachment:fixed;
+
+    color:#123;
+}
+
+
+/* DARK MODE */
+
+body.dark{
+    background:
+    linear-gradient(
+        rgba(0,20,15,.75),
+        rgba(0,50,30,.80)
+    ),
+    url("background.jpg");
+
+    background-size:cover;
+    background-position:center;
+    background-attachment:fixed;
+
+    color:white;
+}
+
+
+/* NAVBAR */
+
+nav{
+    background:rgba(0,75,50,.95);
+    color:white;
+    padding:15px 5%;
+
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+
+    position:sticky;
+    top:0;
+    z-index:100;
+}
+
+nav h2{
+    margin:0;
+}
+
+.nav-buttons button{
+    padding:9px 14px;
+    margin-left:5px;
+    border:0;
+    border-radius:20px;
+    cursor:pointer;
+}
+
+
+/* HERO */
+
+.hero{
+    text-align:center;
+    color:white;
+    padding:65px 15px 45px;
+}
+
+.hero h1{
+    font-size:45px;
+    margin:5px;
+
+    text-shadow:2px 3px 8px rgba(0,0,0,.6);
+}
+
+.hero p{
+    font-size:19px;
+}
+
+
+/* BOX */
+
+.box{
+    width:92%;
+    max-width:1000px;
+
+    margin:22px auto;
+    padding:30px;
+
+    background:rgba(255,255,255,.94);
+
+    border-radius:25px;
+
+    box-shadow:
+    0 10px 30px rgba(0,0,0,.3);
+
+    backdrop-filter:blur(5px);
+}
+
+body.dark .box{
+    background:rgba(20,55,40,.95);
+}
+
+
+/* SEARCH */
+
+.scanner{
+    text-align:center;
+}
+
+input{
+    width:70%;
+    padding:16px;
+
+    border:2px solid #19a34a;
+    border-radius:12px;
+
+    font-size:17px;
+    outline:none;
+}
+
+
+/* BUTTON */
+
+.mainbtn{
+    padding:13px 22px;
+    margin:10px 5px;
+
+    border:0;
+    border-radius:12px;
+
+    background:#159947;
+    color:white;
+
+    font-size:15px;
+    cursor:pointer;
+
+    transition:.2s;
+}
+
+.mainbtn:hover{
+    background:#087f23;
+    transform:scale(1.05);
+}
+
+
+/* RESULT */
+
+#result{
+    margin-top:20px;
+    padding:22px;
+
+    background:#e8f8ec;
+    color:#145c28;
+
+    border-radius:18px;
+
+    font-size:18px;
+    line-height:1.6;
+}
+
+
+/* SUGGESTIONS */
+
+#suggestions{
+    width:70%;
+    margin:auto;
+    text-align:left;
+}
+
+.suggestion{
+    padding:11px;
+
+    background:#f4fff6;
+    border-bottom:1px solid #ddd;
+
+    cursor:pointer;
+}
+
+.suggestion:hover{
+    background:#d8f5df;
+}
+
+
+/* CARDS */
+
+.cards{
+    display:grid;
+
+    grid-template-columns:
+    repeat(auto-fit,minmax(160px,1fr));
+
+    gap:15px;
+}
+
+.card{
+    padding:20px;
+
+    background:#eaf8ed;
+
+    border-radius:18px;
+
+    text-align:center;
+
+    box-shadow:
+    0 4px 10px rgba(0,0,0,.1);
+}
+
+.card h2{
+    color:#087f23;
+    margin:8px;
+}
+
+
+/* PROGRESS */
+
+.progress{
+    height:20px;
+
+    background:#ddd;
+    border-radius:20px;
+
+    overflow:hidden;
+}
+
+.progressbar{
+    height:100%;
+    width:0%;
+
+    background:#159947;
+
+    transition:.5s;
+}
+
+
+/* TIPS */
+
+.tip{
+    padding:15px;
+    margin:9px 0;
+
+    background:#eefaf0;
+
+    border-left:5px solid #159947;
+
+    border-radius:8px;
+}
+
+
+/* FOOTER */
+
+footer{
+    text-align:center;
+    color:white;
+    padding:30px;
+}
+
+
+/* MOBILE */
+
+@media(max-width:600px){
+
+    .hero h1{
+        font-size:30px;
+    }
+
+    input{
+        width:100%;
+    }
+
+    #suggestions{
+        width:100%;
+    }
+
+    nav h2{
+        font-size:19px;
+    }
+}
+
+</style>
+</head>
+
+
+<body>
+
+
+<!-- NAVIGATION -->
+
+<nav>
+
+<h2>🌱 EcoAI</h2>
+
+<div class="nav-buttons">
+
+<button onclick="toggleLanguage()">
+🌐 EN / தமிழ்
+</button>
+
+<button onclick="toggleDark()">
+🌙
+</button>
+
+</div>
+
+</nav>
+
+
+<!-- HERO -->
+
+<section class="hero">
+
+<h1 id="title">
+♻️ AI Smart Waste Management
+</h1>
+
+<p id="subtitle">
+Identify • Classify • Recycle • Protect Earth 🌍
+</p>
+
+</section>
+
+
+<!-- SMART WASTE IDENTIFIER -->
+
+<div class="box scanner">
+
+<h2>🤖 Smart Waste Identifier</h2>
+
+<p id="instruction">
+Type a product or waste item
+</p>
+
+<input
+type="text"
+id="waste"
+oninput="showSuggestions()"
+onkeydown="if(event.key==='Enter') checkWaste()"
+>
+
+<div id="suggestions"></div>
+
+<br>
+
+<button class="mainbtn" onclick="checkWaste()">
+🔍 Check Waste
+</button>
+
+<button class="mainbtn" onclick="voiceInput()">
+🎤 Voice
+</button>
+
+<div id="result">
+👋 Enter an item to identify its waste category.
+</div>
+
+</div>
+
+
+<!-- ANALYTICS -->
+
+<div class="box">
+
+<h2>📊 Waste Analytics</h2>
+
+<div class="cards">
+
+<div class="card">
+<h2 id="total">0</h2>
+<p>Items Checked</p>
+</div>
+
+<div class="card">
+<h2 id="recycle">0</h2>
+<p>♻️ Recyclable</p>
+</div>
+
+<div class="card">
+<h2 id="nonrecycle">0</h2>
+<p>🚫 Non-Recyclable</p>
+</div>
+
+<div class="card">
+<h2 id="organic">0</h2>
+<p>🍃 Organic</p>
+</div>
+
+<div class="card">
+<h2 id="ewaste">0</h2>
+<p>🔋 E-Waste</p>
+</div>
+
+<div class="card">
+<h2 id="hazardous">0</h2>
+<p>⚠️ Hazardous</p>
+</div>
+
+</div>
+</div>
+
+
+<!-- DAILY GOAL -->
+
+<div class="box">
+
+<h2>🎯 Daily Eco Goal</h2>
+
+<p>Classify 5 waste items today</p>
+
+<div class="progress">
+
+<div id="goalbar" class="progressbar"></div>
+
+</div>
+
+<p id="goaltext">0 / 5 completed</p>
+
+</div>
+
+
+<!-- SCORE -->
+
+<div class="box">
+
+<h2>🏆 Eco Score & Achievements</h2>
+
+<div class="cards">
+
+<div class="card">
+
+<h2 id="score">0</h2>
+
+<p>Eco Points</p>
+
+</div>
+
+<div class="card">
+
+<h2 id="badge">
+🌱 Beginner
+</h2>
+
+<p>Achievement</p>
+
+</div>
+
+</div>
+
+</div>
+
+
+<!-- IMPACT -->
+
+<div class="box">
+
+<h2>🌍 Environmental Impact</h2>
+
+<div class="cards">
+
+<div class="card">
+
+<h2 id="impact">0</h2>
+
+<p>Eco Actions</p>
+
+</div>
+
+<div class="card">
+
+<h2 id="green">0</h2>
+
+<p>Green Points</p>
+
+</div>
+
+</div>
+
+<p>
+🌳 Every correct classification supports better waste segregation and responsible disposal.
+</p>
+
+</div>
+
+
+<!-- HISTORY -->
+
+<div class="box">
+
+<h2>📜 Waste History</h2>
+
+<ol id="history">
+
+<li>No searches yet.</li>
+
+</ol>
+
+<button class="mainbtn" onclick="downloadReport()">
+📥 Download Report
+</button>
+
+<button class="mainbtn" onclick="clearHistory()">
+🧹 Clear History
+</button>
+
+</div>
+
+
+<!-- RECYCLING CENTER -->
+
+<div class="box">
+
+<h2>📍 Find Recycling Center</h2>
+
+<p>
+Find recycling facilities near your location.
+</p>
+
+<button class="mainbtn" onclick="findCenter()">
+📍 Find Nearby Center
+</button>
+
+</div>
+
+
+<!-- DISPOSAL GUIDE -->
+
+<div class="box">
+
+<h2>💡 Smart Disposal Guide</h2>
+
+<div class="tip">
+♻️ <b>Recyclable:</b>
+Clean and separate recyclable materials.
+</div>
+
+<div class="tip">
+🚫 <b>Non-Recyclable:</b>
+Do not mix contaminated materials with recycling.
+</div>
+
+<div class="tip">
+🍃 <b>Organic:</b>
+Use suitable composting or organic collection.
+</div>
+
+<div class="tip">
+🔋 <b>E-Waste:</b>
+Use authorized e-waste collection facilities.
+</div>
+
+<div class="tip">
+⚠️ <b>Hazardous:</b>
+Keep hazardous materials separate.
+</div>
+
+<div class="tip">
+👕 <b>Textile:</b>
+Reuse or donate usable clothes.
+</div>
+
+<div class="tip">
+🛞 <b>Rubber:</b>
+Use suitable tyre/rubber recycling facilities.
+</div>
+
+<div class="tip">
+🏥 <b>Medical:</b>
+Keep medical waste separate.
+</div>
+
+<div class="tip">
+🌍 <b>Golden Rule:</b>
+Reduce → Reuse → Recycle.
+</div>
+
+</div>
+
+
+<footer>
+
+🌱 <b>EcoAI Smart Waste Management</b>
+
+<br><br>
+
+Reduce Waste • Reuse More • Recycle Responsibly ♻️
+
+</footer>
+
+
+<script>
+
+
+/* DATA */
+
+let total=0;
+let recycle=0;
+let nonrecycle=0;
+let organic=0;
+let ewaste=0;
+let hazardous=0;
+let score=0;
+
+let historyData=[];
+
+
+/* PRODUCTS */
+
+const suggestions=[
+
+"plastic bottle",
+"plastic bag",
+"plastic cup",
+"plastic container",
+"plastic box",
+"plastic bucket",
+"plastic toy",
+"water bottle",
+"milk bottle",
+"shampoo bottle",
+
+"paper",
+"newspaper",
+"magazine",
+"book",
+"notebook",
+"paper bag",
+"cardboard",
+"cardboard box",
+"carton",
+
+"glass bottle",
+"glass jar",
+"glass container",
+
+"aluminium can",
+"aluminum can",
+"steel can",
+"iron",
+"metal box",
+"tin can",
+"soda can",
+
+"banana",
+"banana peel",
+"apple",
+"orange",
+"fruit",
+"vegetable",
+"food waste",
+"rice",
+"bread",
+"egg shell",
+"meat",
+"fish waste",
+"tea leaves",
+"coffee grounds",
+"flower",
+"grass",
+"leaves",
+"coconut",
+
+"mobile phone",
+"smartphone",
+"laptop",
+"computer",
+"tablet",
+"keyboard",
+"mouse",
+"charger",
+"battery",
+"power bank",
+"television",
+"tv",
+"monitor",
+"printer",
+"camera",
+"headphone",
+"earphone",
+"speaker",
+"remote",
+"smartwatch",
+"router",
+"modem",
+"hard disk",
+"pen drive",
+
+"shirt",
+"t shirt",
+"jeans",
+"dress",
+"clothes",
+"cloth",
+"fabric",
+"shoe",
+"sock",
+"towel",
+"bedsheet",
+"curtain",
+
+"tyre",
+"tire",
+"rubber",
+
+"medicine",
+"tablet",
+"syringe",
+"medical mask",
+"bandage",
+"gloves",
+
+"chemical",
+"paint",
+"pesticide",
+"insecticide",
+"acid",
+"bleach",
+"solvent",
+"petrol",
+"diesel",
+
+"tissue",
+"used tissue",
+"diaper",
+"sanitary pad",
+"thermocol",
+"styrofoam",
+"ceramic",
+"mirror",
+"sponge",
+"dirty paper"
+
+];
+
+
+/* SUGGESTIONS */
+
+function showSuggestions(){
+
+let input=document
+.getElementById("waste")
+.value
+.toLowerCase();
+
+let box=document
+.getElementById("suggestions");
+
+box.innerHTML="";
+
+if(input==="") return;
+
+let matches=suggestions
+.filter(item=>item.includes(input))
+.slice(0,6);
+
+matches.forEach(item=>{
+
+let div=document.createElement("div");
+
+div.className="suggestion";
+
+div.innerText=item;
+
+div.onclick=function(){
+
+document.getElementById("waste")
+.value=item;
+
+box.innerHTML="";
+
+};
+
+box.appendChild(div);
+
+});
+
+}
+
+
+/* CLASSIFIER */
+
+function checkWaste(){
+
+let waste=document
+.getElementById("waste")
+.value
+.toLowerCase()
+.trim();
+
+let result=document
+.getElementById("result");
+
+if(waste===""){
+
+result.innerHTML=
+"⚠️ Please enter a product or waste item.";
+
+return;
+
+}
+
+let category="";
+let disposal="";
+let points=0;
+
+
+/* ORGANIC */
+
+if(
+waste.includes("banana") ||
+waste.includes("apple") ||
+waste.includes("orange") ||
+waste.includes("fruit") ||
+waste.includes("vegetable") ||
+waste.includes("food") ||
+waste.includes("rice") ||
+waste.includes("bread") ||
+waste.includes("egg") ||
+waste.includes("meat") ||
+waste.includes("fish") ||
+waste.includes("tea") ||
+waste.includes("coffee") ||
+waste.includes("flower") ||
+waste.includes("grass") ||
+waste.includes("leaves") ||
+waste.includes("coconut")
+){
+
+category="🍃 Organic / Biodegradable Waste";
+
+disposal=
+"Separate it and use suitable composting or organic-waste collection.";
+
+points=5;
+organic++;
+
+}
+
+
+/* E-WASTE */
+
+else if(
+waste.includes("mobile") ||
+waste.includes("smartphone") ||
+waste.includes("phone") ||
+waste.includes("laptop") ||
+waste.includes("computer") ||
+waste.includes("tablet") ||
+waste.includes("keyboard") ||
+waste.includes("mouse") ||
+waste.includes("charger") ||
+waste.includes("battery") ||
+waste.includes("power bank") ||
+waste.includes("television") ||
+waste.includes("tv") ||
+waste.includes("monitor") ||
+waste.includes("printer") ||
+waste.includes("camera") ||
+waste.includes("headphone") ||
+waste.includes("earphone") ||
+waste.includes("speaker") ||
+waste.includes("remote") ||
+waste.includes("smartwatch") ||
+waste.includes("electronic") ||
+waste.includes("router") ||
+waste.includes("modem") ||
+waste.includes("hard disk") ||
+waste.includes("pen drive")
+){
+
+category="🔋 Electronic Waste";
+
+disposal=
+"Send it to an authorized e-waste collection facility.";
+
+points=10;
+ewaste++;
+
+}
+
+
+/* HAZARDOUS */
+
+else if(
+waste.includes("chemical") ||
+waste.includes("acid") ||
+waste.includes("paint") ||
+waste.includes("pesticide") ||
+waste.includes("insecticide") ||
+waste.includes("fertilizer") ||
+waste.includes("bleach") ||
+waste.includes("toxic") ||
+waste.includes("solvent") ||
+waste.includes("petrol") ||
+waste.includes("diesel")
+){
+
+category="⚠️ Hazardous Waste";
+
+disposal=
+"Keep it separate and follow local hazardous-waste disposal guidance.";
+
+points=10;
+hazardous++;
+
+}
+
+
+/* MEDICAL */
+
+else if(
+waste.includes("medicine") ||
+waste.includes("tablet") ||
+waste.includes("syringe") ||
+waste.includes("medical") ||
+waste.includes("bandage") ||
+waste.includes("sanitary") ||
+waste.includes("glove") ||
+waste.includes("mask")
+){
+
+category="🏥 Medical Waste";
+
+disposal=
+"Keep medical waste separate and follow appropriate disposal guidance.";
+
+points=10;
+hazardous++;
+
+}
+
+
+/* NON RECYCLABLE */
+
+else if(
+waste.includes("tissue") ||
+waste.includes("diaper") ||
+waste.includes("thermocol") ||
+waste.includes("styrofoam") ||
+waste.includes("ceramic") ||
+waste.includes("mirror") ||
+waste.includes("sponge") ||
+waste.includes("dirty paper") ||
+waste.includes("soiled paper") ||
+waste.includes("napkin")
+){
+
+category="🚫 Non-Recyclable Waste";
+
+disposal=
+"Do not put it in the recycling bin. Follow local general-waste guidelines.";
+
+points=2;
+nonrecycle++;
+
+}
+
+
+/* TEXTILE */
+
+else if(
+waste.includes("shirt") ||
+waste.includes("t shirt") ||
+waste.includes("jeans") ||
+waste.includes("dress") ||
+waste.includes("clothes") ||
+waste.includes("cloth") ||
+waste.includes("fabric") ||
+waste.includes("shoe") ||
+waste.includes("sock") ||
+waste.includes("towel") ||
+waste.includes("bedsheet") ||
+waste.includes("curtain")
+){
+
+category="👕 Textile Waste";
+
+disposal=
+"Reuse, donate or send suitable textiles to a textile collection facility.";
+
+points=8;
+
+}
+
+
+/* RUBBER */
+
+else if(
+waste.includes("tyre") ||
+waste.includes("tire") ||
+waste.includes("rubber")
+){
+
+category="🛞 Rubber Waste";
+
+disposal=
+"Send it to a suitable rubber or tyre recycling facility.";
+
+points=8;
+
+}
+
+
+/* RECYCLABLE */
+
+else if(
+waste.includes("plastic") ||
+waste.includes("bottle") ||
+waste.includes("paper") ||
+waste.includes("newspaper") ||
+waste.includes("magazine") ||
+waste.includes("notebook") ||
+waste.includes("book") ||
+waste.includes("cardboard") ||
+waste.includes("carton") ||
+waste.includes("box") ||
+waste.includes("glass") ||
+waste.includes("jar") ||
+waste.includes("metal") ||
+waste.includes("steel") ||
+waste.includes("iron") ||
+waste.includes("aluminium") ||
+waste.includes("aluminum") ||
+waste.includes("tin") ||
+waste.includes("can")
+){
+
+category="♻️ Recyclable Waste";
+
+disposal=
+"Clean, separate and send it to the appropriate recycling collection.";
+
+points=5;
+recycle++;
+
+}
+
+
+/* UNKNOWN */
+
+else{
+
+category="🗑️ General / Needs Verification";
+
+disposal=
+"Item not confidently classified. Check local waste-management guidance.";
+
+points=2;
+
+}
+
+
+/* UPDATE */
+
+total++;
+score+=points;
+
+result.innerHTML=
+"🔎 <b>Item:</b> "+waste+
+"<br><br>🏷️ <b>Category:</b> "+category+
+"<br><br>💡 <b>Disposal:</b> "+disposal+
+"<br><br>🏆 <b>Eco Points:</b> +"+points;
+
+
+/* DASHBOARD */
+
+document.getElementById("total").innerText=total;
+document.getElementById("recycle").innerText=recycle;
+document.getElementById("nonrecycle").innerText=nonrecycle;
+document.getElementById("organic").innerText=organic;
+document.getElementById("ewaste").innerText=ewaste;
+document.getElementById("hazardous").innerText=hazardous;
+document.getElementById("score").innerText=score;
+
+
+/* GOAL */
+
+let percentage=Math.min(total*20,100);
+
+document.getElementById("goalbar")
+.style.width=percentage+"%";
+
+document.getElementById("goaltext")
+.innerText=Math.min(total,5)+" / 5 completed";
+
+
+/* BADGE */
+
+if(score>=50){
+
+document.getElementById("badge")
+.innerText="🌍 Earth Protector";
+
+}
+else if(score>=25){
+
+document.getElementById("badge")
+.innerText="♻️ Recycling Hero";
+
+}
+else if(score>=10){
+
+document.getElementById("badge")
+.innerText="🌱 Eco Starter";
+
+}
+
+
+/* IMPACT */
+
+document.getElementById("impact").innerText=total;
+document.getElementById("green").innerText=score;
+
+
+/* HISTORY */
+
+historyData.push(waste+" → "+category);
+
+updateHistory();
+saveData();
+
+
+document.getElementById("waste").value="";
+document.getElementById("suggestions").innerHTML="";
+
+}
+
+
+/* HISTORY */
+
+function updateHistory(){
+
+let history=document
+.getElementById("history");
+
+history.innerHTML="";
+
+historyData
+.slice()
+.reverse()
+.forEach(item=>{
+
+let li=document.createElement("li");
+
+li.innerText=item;
+
+history.appendChild(li);
+
+});
+
+}
+
+
+/* SAVE */
+
+function saveData(){
+
+localStorage.setItem(
+"ecoHistory",
+JSON.stringify(historyData)
+);
+
+localStorage.setItem(
+"ecoScore",
+score
+);
+
+}
+
+
+/* LOAD */
+
+function loadData(){
+
+let saved=localStorage
+.getItem("ecoHistory");
+
+if(saved){
+
+historyData=JSON.parse(saved);
+
+updateHistory();
+
+}
+
+let savedScore=localStorage
+.getItem("ecoScore");
+
+if(savedScore){
+
+score=parseInt(savedScore);
+
+document.getElementById("score")
+.innerText=score;
+
+}
+
+}
+
+
+/* CLEAR */
+
+function clearHistory(){
+
+historyData=[];
+score=0;
+total=0;
+recycle=0;
+nonrecycle=0;
+organic=0;
+ewaste=0;
+hazardous=0;
+
+localStorage.clear();
+
+document.getElementById("history")
+.innerHTML="<li>No searches yet.</li>";
+
+document.getElementById("total").innerText=0;
+document.getElementById("recycle").innerText=0;
+document.getElementById("nonrecycle").innerText=0;
+document.getElementById("organic").innerText=0;
+document.getElementById("ewaste").innerText=0;
+document.getElementById("hazardous").innerText=0;
+document.getElementById("score").innerText=0;
+document.getElementById("impact").innerText=0;
+document.getElementById("green").innerText=0;
+
+document.getElementById("goalbar")
+.style.width="0%";
+
+document.getElementById("goaltext")
+.innerText="0 / 5 completed";
+
+document.getElementById("badge")
+.innerText="🌱 Beginner";
+
+}
+
+
+/* REPORT */
+
+function downloadReport(){
+
+let report=
+"EcoAI Smart Waste Management Report\n\n";
+
+report+="Total Items: "+total+"\n";
+report+="Recyclable: "+recycle+"\n";
+report+="Non-Recyclable: "+nonrecycle+"\n";
+report+="Organic: "+organic+"\n";
+report+="E-Waste: "+ewaste+"\n";
+report+="Hazardous: "+hazardous+"\n";
+report+="Eco Score: "+score+"\n\n";
+
+report+="Waste History:\n";
+
+historyData.forEach(item=>{
+report+="- "+item+"\n";
+});
+
+let blob=new Blob(
+[report],
+{type:"text/plain"}
+);
+
+let url=URL.createObjectURL(blob);
+
+let a=document.createElement("a");
+
+a.href=url;
+a.download="EcoAI_Waste_Report.txt";
+
+a.click();
+
+URL.revokeObjectURL(url);
+
+}
+
+
+/* RECYCLING CENTER */
+
+function findCenter(){
+
+window.open(
+"https://www.google.com/maps/search/recycling+center+near+me",
+"_blank"
+);
+
+}
+
+
+/* VOICE */
+
+function voiceInput(){
+
+if(!("webkitSpeechRecognition" in window)){
+
+alert("Voice input is not supported in this browser.");
+
+return;
+
+}
+
+let recognition=
+new webkitSpeechRecognition();
+
+recognition.lang="en-IN";
+
+recognition.start();
+
+recognition.onresult=function(event){
+
+document.getElementById("waste")
+.value=
+event.results[0][0].transcript;
+
+};
+
+}
+
+
+/* DARK MODE */
+
+function toggleDark(){
+
+document.body.classList.toggle("dark");
+
+}
+
+
+/* LANGUAGE */
+
+let tamil=false;
+
+function toggleLanguage(){
+
+tamil=!tamil;
+
+if(tamil){
+
+document.getElementById("title")
+.innerText=
+"♻️ AI ஸ்மார்ட் கழிவு மேலாண்மை";
+
+document.getElementById("subtitle")
+.innerText=
+"கண்டறி • வகைப்படுத்து • மறுசுழற்சி செய் • பூமியை பாதுகாப்போம் 🌍";
+
+document.getElementById("instruction")
+.innerText=
+"பொருள் அல்லது கழிவின் பெயரை உள்ளிடவும்";
+
+}
+else{
+
+document.getElementById("title")
+.innerText=
+"♻️ AI Smart Waste Management";
+
+document.getElementById("subtitle")
+.innerText=
+"Identify • Classify • Recycle • Protect Earth 🌍";
+
+document.getElementById("instruction")
+.innerText=
+"Type a product or waste item";
+
+}
+
+}
+
+
+/* START */
+
+loadData();
+
+</script>
+
+<!-- Code injected by live-server -->
+<script>
+	// <![CDATA[  <-- For SVG support
+	if ('WebSocket' in window) {
+		(function () {
+			function refreshCSS() {
+				var sheets = [].slice.call(document.getElementsByTagName("link"));
+				var head = document.getElementsByTagName("head")[0];
+				for (var i = 0; i < sheets.length; ++i) {
+					var elem = sheets[i];
+					var parent = elem.parentElement || head;
+					parent.removeChild(elem);
+					var rel = elem.rel;
+					if (elem.href && typeof rel != "string" || rel.length == 0 || rel.toLowerCase() == "stylesheet") {
+						var url = elem.href.replace(/(&|\?)_cacheOverride=\d+/, '');
+						elem.href = url + (url.indexOf('?') >= 0 ? '&' : '?') + '_cacheOverride=' + (new Date().valueOf());
+					}
+					parent.appendChild(elem);
+				}
+			}
+			var protocol = window.location.protocol === 'http:' ? 'ws://' : 'wss://';
+			var address = protocol + window.location.host + window.location.pathname + '/ws';
+			var socket = new WebSocket(address);
+			socket.onmessage = function (msg) {
+				if (msg.data == 'reload') window.location.reload();
+				else if (msg.data == 'refreshcss') refreshCSS();
+			};
+			if (sessionStorage && !sessionStorage.getItem('IsThisFirstTime_Log_From_LiveServer')) {
+				console.log('Live reload enabled.');
+				sessionStorage.setItem('IsThisFirstTime_Log_From_LiveServer', true);
+			}
+		})();
+	}
+	else {
+		console.error('Upgrade your browser. This Browser is NOT supported WebSocket for Live-Reloading.');
+	}
+	// ]]>
+</script>
+</body>
+</html>
